@@ -82,7 +82,7 @@ export const mappings = {
   selenium: "selenium",
   cypress: "cypress",
   jest: "jest",
-  mocha: "mocha",
+  mocha: "mocha", 
   chai: "chai",
   karma: "karma",
   vuex: "vuex",
