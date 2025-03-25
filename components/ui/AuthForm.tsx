@@ -92,7 +92,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
     } catch (error) {
       console.error("Authentication error:", error);
 
-      toast.error(`There was an error: ${error}`);
+      toast.error(
+        "Failed to authenticate. Please try again with valid credentials."
+      );
     }
   };
 
