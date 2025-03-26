@@ -9,7 +9,7 @@ enum CallStatus {
   FINISHED = "FINISHED",
 }
 const Agent = ({ userName }: AgentProps) => {
-  const callStatus = CallStatus.FINISHED;
+  const callStatus: CallStatus = CallStatus.FINISHED;
   const isSpeaking = true;
   const messages = ["whats your name?", "my name is jon doe,nice to meet you."];
   const lastMessage = messages[messages.length - 1];
@@ -67,11 +67,11 @@ const Agent = ({ userName }: AgentProps) => {
             <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
-                (callStatus === "CONNECTING") & "hidden"
+                callStatus === "CONNECTING" && "hidden"
               )}
             />
             <span>
-              {callStatus === "INACTIVE" || callStatus === "FINISHED"
+              {callStatus === "INACTIVE" || callStatus === CallStatus.FINISHED
                 ? "Call"
                 : ". . . "}
             </span>
