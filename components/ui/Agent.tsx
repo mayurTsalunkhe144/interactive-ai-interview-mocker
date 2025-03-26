@@ -1,6 +1,9 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+
+import React, { useEffect, useState } from "react";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -8,11 +11,26 @@ enum CallStatus {
   ACTIVE = "ACTIVE",
   FINISHED = "FINISHED",
 }
-const Agent = ({ userName }: AgentProps) => {
-  const callStatus: CallStatus = CallStatus.FINISHED;
-  const isSpeaking = true;
-  const messages = ["whats your name?", "my name is jon doe,nice to meet you."];
-  const lastMessage = messages[messages.length - 1];
+interface SavedMessage {
+  role: "user" | "system" | "assistent";
+  content: string;
+}
+const Agent = ({ userName, userId, type }: AgentProps) => {
+  const router = useRouter();
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
+  const [messages, setMessages] = useState<SavedMessage[]>([]);
+  useEffect(() => {
+    const onCallStarts = () => setCallStatus(CallStatus.ACTIVE);
+    const onCallEnds = () => setCallStatus(CallStatus.FINISHED);
+    const onMessage = (message: Message) => {
+      if (message.type === "transcript" && message.transcriptType === "final") {
+        const newMessage = { role: message.role, content: message.transcript };
+        setMessages((prev) => [...prev, newMessage]);
+      }
+    };
+  }, []);
+
   return (
     <>
       <div className="call-view ">
@@ -85,3 +103,6 @@ const Agent = ({ userName }: AgentProps) => {
 };
 
 export default Agent;
+function userRouter() {
+  throw new Error("Function not implemented.");
+}
