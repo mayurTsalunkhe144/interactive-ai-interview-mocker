@@ -53,7 +53,7 @@ const page = async () => {
         </div>
       </section>
 
-      <section className="flex flex-col gap-6 mt-8">
+      <section className="flex flex-col gap-6 mt-8 max-h-[1000px]  overflow-y-auto  hide-scrollbar">
         <h2 className=" cursor-pointer">
           Take An Interview From Latest Interviews Taken By Other Candidates
         </h2>
