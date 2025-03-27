@@ -1,5 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { vapi } from "@/lib/vapi.sdk";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +22,8 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
+  // const [lastMessage, setLastMessage] = useState<string>("");
+
   useEffect(() => {
     const onCallStarts = () => setCallStatus(CallStatus.ACTIVE);
     const onCallEnds = () => setCallStatus(CallStatus.FINISHED);
@@ -29,8 +33,50 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
         setMessages((prev) => [...prev, newMessage]);
       }
     };
+    const onSpeechStart = () => setIsSpeaking(true);
+    const onSpeechEnd = () => setIsSpeaking(false);
+
+    const OnError = (error: Error) => console.log("Error", error);
+
+    vapi.on("call-start", onCallStarts);
+    vapi.on("call-end", onCallEnds);
+    vapi.on("message", onMessage);
+    vapi.on("speech-start", onSpeechStart);
+    vapi.on("speech-end", onSpeechEnd);
+    vapi.on("error", OnError);
+
+    return () => {
+      vapi.off("call-end", onCallEnds);
+      vapi.off("message", onMessage);
+      vapi.off("call-start", onCallStarts);
+      vapi.off("speech-start", onSpeechStart);
+      vapi.off("speech-end", onSpeechEnd);
+      vapi.off("error", OnError);
+    };
   }, []);
 
+  useEffect(() => {
+    if (callStatus === CallStatus.FINISHED) {
+      router.push("/");
+    }
+  }, [messages, callStatus, type, userId]);
+  const handleCall = async () => {
+    setCallStatus(CallStatus.CONNECTING);
+    await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+      variableValues: {
+        username: userName,
+        userid: userId,
+      },
+    });
+  };
+  const handlediscconnect = async () => {
+    setCallStatus(CallStatus.FINISHED);
+    vapi.stop();
+  };
+
+  const lastMessage = messages[messages.length - 1]?.content;
+  const isCallInactiveOrFinished =
+    callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
   return (
     <>
       <div className="call-view ">
@@ -81,21 +127,19 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
 
       <div className="w-full flex justify-center mt-9">
         {callStatus !== "ACTIVE" ? (
-          <button className="relative btn-call">
+          <button className="relative btn-call" onClick={handleCall}>
             <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
                 callStatus === "CONNECTING" && "hidden"
               )}
             />
-            <span>
-              {callStatus === "INACTIVE" || callStatus === CallStatus.FINISHED
-                ? "Call"
-                : ". . . "}
-            </span>
+            <span>{isCallInactiveOrFinished ? "Call" : ". . . "}</span>
           </button>
         ) : (
-          <button className="btn-disconnect">End</button>
+          <button className="btn-disconnect" onClick={handlediscconnect}>
+            End
+          </button>
         )}
       </div>
     </>
@@ -103,6 +147,3 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
 };
 
 export default Agent;
-function userRouter() {
-  throw new Error("Function not implemented.");
-}
