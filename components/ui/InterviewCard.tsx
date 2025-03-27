@@ -20,7 +20,7 @@ const InterviewCard = ({
     feedback?.createdAt || createdAt || Date.now()
   ).format(" MMM d, YYYY");
   return (
-    <div className="card-border w-[360px] max-sm:w-full min-h-96">
+    <div className="card-border w-[360px] max-sm:w-full min-h-96 cursor-pointer">
       <div className="card-interview">
         <div className="">
           <div className="absolute top-0 right-0 p-2 w-fit px-4 py-2 rounded-bl-lg bg-light-600">

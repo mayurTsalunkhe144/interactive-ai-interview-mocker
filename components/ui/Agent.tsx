@@ -29,7 +29,10 @@ const Agent = ({ userName, userId, type }: AgentProps) => {
     const onCallEnds = () => setCallStatus(CallStatus.FINISHED);
     const onMessage = (message: Message) => {
       if (message.type === "transcript" && message.transcriptType === "final") {
-        const newMessage = { role: message.role, content: message.transcript };
+        const newMessage: SavedMessage = {
+          role: message.role as "user" | "system" | "assistent",
+          content: message.transcript,
+        };
         setMessages((prev) => [...prev, newMessage]);
       }
     };
