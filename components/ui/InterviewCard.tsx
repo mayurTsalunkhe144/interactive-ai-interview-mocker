@@ -5,7 +5,8 @@ import { getRandomInterviewCover } from "@/lib/utils";
 import { Button } from "./button";
 import Link from "next/link";
 import DisplayTechicons from "./DisplayTechicons";
-const InterviewCard = ({
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+const InterviewCard = async ({
   id,
   userId,
   role,
@@ -14,7 +15,11 @@ const InterviewCard = ({
   createdAt,
 }: InterviewCardProps) => {
   console.log(userId);
-  const feedback = null as Feedback | null;
+  const feedback =
+    userId && id
+      ? await getFeedbackByInterviewId({ interviewId: id, userId })
+      : null;
+  console.log(feedback);
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const formmatedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()

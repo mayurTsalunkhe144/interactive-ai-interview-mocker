@@ -1,5 +1,6 @@
 "use client";
 import { interviewer } from "@/constants";
+import { createFeedback } from "@/lib/actions/general.action";
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 
@@ -68,12 +69,13 @@ const Agent = ({
   const handleGenrateFeedback = async (messages: SavedMessage[]) => {
     console.log("Generate FeedBack here.");
     // todo
-    const { success, id } = {
-      success: true,
-      id: "feedback-id",
-    };
+    const { success: success, feedbackId: id } = await createFeedback({
+      interviewId: interviewId!,
+      userId: userId!,
+      transcript: messages,
+    });
     if (success && id) {
-      router.push(`interview/${interviewId}/feedback`);
+      router.push(`/interview/${interviewId}/feedback`);
     } else {
       console.log("Error saving feedback");
       router.push("/");
