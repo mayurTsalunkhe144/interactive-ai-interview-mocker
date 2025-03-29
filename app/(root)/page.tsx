@@ -4,22 +4,26 @@ import Link from "next/link";
 import React from "react";
 
 import InterviewCard from "@/components/ui/InterviewCard";
-import { getCurrentUser } from "@/lib/actions/auth.action";
+import { getCurrentUser, signOut } from "@/lib/actions/auth.action";
 import {
   getInterviewsByUserId,
   getLatestInterviews,
 } from "@/lib/actions/general.action";
+import SignOutButton from "@/components/ui/SignOutButton";
 
 const page = async () => {
-  const user = await getCurrentUser();
+  const user = (await getCurrentUser()) || null;
   const [userInterviews, latestInterviews] = await Promise.all([
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     getInterviewsByUserId(user?.id!),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     getLatestInterviews({ userId: user?.id! }),
   ]);
   const hasPastInterviews = userInterviews?.length > 0;
   const hasUpcomingInterviews = latestInterviews?.length > 0;
   return (
     <>
+      <SignOutButton />
       <section className="card-cta">
         <div className=" flex flex-col gap-6 max-w-lg">
           <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
