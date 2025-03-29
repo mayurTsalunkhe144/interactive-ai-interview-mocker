@@ -9,12 +9,20 @@ const monaSans = Mona_Sans({
   subsets: ["latin"],
 });
 
+export async function generateMetadata() {
+  return {
+    title: "AI Mock Interview Platform",
+    description: "Practice AI-powered mock interviews and ace your job search.",
+    other: {
+      "google-site-verification": "W5cIYmHjQWGx8gun7Ru9L4QGXEQD1EaQURHqDXVWrlA",
+    },
+  };
+}
 
-
-export const metadata: Metadata = {
-  title: "Ai-interview_mocker",
-  description: "Ai interview mocker",
-};
+// export const metadata: Metadata = {
+//   title: "Ai-interview_mocker",
+//   description: "Ai interview mocker",
+// };
 
 export default function RootLayout({
   children,
@@ -22,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">      
-    <body
+    <html lang="en" className="dark">
+      <body
         className={`${monaSans.variable} ${monaSans.variable} antialiased pattern`}
       >
         {children}
