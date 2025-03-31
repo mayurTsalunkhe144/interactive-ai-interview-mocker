@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -13,9 +12,6 @@ export async function generateMetadata() {
   return {
     title: "AI Mock Interview Platform",
     description: "Practice AI-powered mock interviews and ace your job search.",
-    other: {
-      "google-site-verification": "W5cIYmHjQWGx8gun7Ru9L4QGXEQD1EaQURHqDXVWrlA",
-    },
   };
 }
 
@@ -31,6 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <meta
+        name="google-site-verification"
+        content="GTRHOBOC5oKzxaX3Ueu8NdyCEdEplHl_ERlAAqIawgg"
+      />
       <body
         className={`${monaSans.variable} ${monaSans.variable} antialiased pattern`}
       >
