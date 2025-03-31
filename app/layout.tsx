@@ -31,6 +31,11 @@ export default function RootLayout({
         name="google-site-verification"
         content="GTRHOBOC5oKzxaX3Ueu8NdyCEdEplHl_ERlAAqIawgg"
       />
+      <meta
+        name="keywords"
+        content="interview preparation, coding questions, technical interviews, HR interviews, PrepGen, programming challenges"
+      />
+      <meta name="author" content="PrepGen Team" />
       <body
         className={`${monaSans.variable} ${monaSans.variable} antialiased pattern`}
       >
