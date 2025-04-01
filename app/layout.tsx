@@ -10,7 +10,7 @@ const monaSans = Mona_Sans({
 
 export async function generateMetadata() {
   return {
-    title: "AI Mock Interview Platform",
+    title: "Prepgen",
     description: "Practice AI-powered mock interviews and ace your job search.",
   };
 }
