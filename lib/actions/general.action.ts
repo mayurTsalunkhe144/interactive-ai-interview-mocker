@@ -95,14 +95,22 @@ export async function getLatestInterviews(
 ): Promise<Interview[] | null> {
   const { userId, limit = 20 } = params;
 
+  // const interviews = await db
+  //   .collection("interviews")
+  //   .orderBy("createdAt", "desc")
+  //   .where("finalized", "==", true)
+  //   .where("userId", "!=", userId)
+  //   .limit(limit)
+  //   .get();
   const interviews = await db
     .collection("interviews")
-    .orderBy("createdAt", "desc")
-    .where("finalized", "==", true)
     .where("userId", "!=", userId)
+    .orderBy("createdAt", "desc")
+    .where("finilized", "==", true)
     .limit(limit)
     .get();
 
+  console.log("interviews", interviews.docs);
   return interviews.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),

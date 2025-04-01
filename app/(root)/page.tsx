@@ -1,78 +1,96 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import Image from "next/image";
 
+import { Button } from "@/components/ui/button";
 import InterviewCard from "@/components/ui/InterviewCard";
-import { getCurrentUser, signOut } from "@/lib/actions/auth.action";
+
+import { getCurrentUser } from "@/lib/actions/auth.action";
 import {
   getInterviewsByUserId,
   getLatestInterviews,
 } from "@/lib/actions/general.action";
 import SignOutButton from "@/components/ui/SignOutButton";
 
-const page = async () => {
-  const user = (await getCurrentUser()) || null;
-  const [userInterviews, latestInterviews] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+async function Home() {
+  const user = await getCurrentUser();
+
+  const [userInterviews, allInterview] = await Promise.all([
     getInterviewsByUserId(user?.id!),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
     getLatestInterviews({ userId: user?.id! }),
   ]);
-  const hasPastInterviews = userInterviews?.length > 0;
-  const hasUpcomingInterviews = latestInterviews?.length > 0;
+
+  const hasPastInterviews = userInterviews?.length! > 0;
+  const hasUpcomingInterviews = allInterview?.length! > 0;
+  console.log("latest interview", allInterview);
   return (
     <>
       <SignOutButton />
       <section className="card-cta">
-        <div className=" flex flex-col gap-6 max-w-lg">
+        <div className="flex flex-col gap-6 max-w-lg">
           <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
           <p className="text-lg">
-            Practice on real interview questions with AI-powered feedback. Get
-            instant feedback on your answers and improve your interview skills.
+            Practice real interview questions & get instant feedback
           </p>
-          <Button asChild className="btn-primary max-sm:w-full ">
-            <Link href="/interview">Start An Interview</Link>
+
+          <Button asChild className="btn-primary max-sm:w-full">
+            <Link href="/interview">Create an Interview</Link>
           </Button>
         </div>
+
         <Image
           src="/robot.png"
+          alt="robo-dude"
           width={400}
           height={400}
-          alt="robot image"
           className="max-sm:hidden"
         />
       </section>
 
-      <section className="flex flex-col gap-6 mt-8 max-h-[1000px]  overflow-y-auto  hide-scrollbar">
+      <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>
+
         <div className="interviews-section">
           {hasPastInterviews ? (
             userInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                id={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
             ))
           ) : (
-            <p>You haven&apos;t taken any interview yet</p>
+            <p>You haven&apos;t taken any interviews yet</p>
           )}
         </div>
       </section>
 
-      <section className="flex flex-col gap-6 mt-8 max-h-[1000px]  overflow-y-auto  hide-scrollbar">
-        <h2 className=" cursor-pointer">
-          Take An Interview From Latest Interviews Taken By Other Candidates
-        </h2>
+      <section className="flex flex-col gap-6 mt-8">
+        <h2>Take Interviews from Other Candidates</h2>
+
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
-            latestInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+            allInterview?.map((interview) => (
+              <InterviewCard
+                key={interview.id}
+                userId={user?.id}
+                id={interview.id}
+                role={interview.role}
+                type={interview.type}
+                techstack={interview.techstack}
+                createdAt={interview.createdAt}
+              />
             ))
           ) : (
-            <p>There are No New Interviews</p>
+            <p>There are no interviews available</p>
           )}
         </div>
       </section>
     </>
   );
-};
+}
 
-export default page;
+export default Home;

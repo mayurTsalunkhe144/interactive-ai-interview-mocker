@@ -85,6 +85,7 @@ const Agent = ({
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
         router.push("/");
+        router.refresh();
       } else {
         handleGenrateFeedback(messages);
       }

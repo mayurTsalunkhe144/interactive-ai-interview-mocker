@@ -14,16 +14,16 @@ const InterviewCard = async ({
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  console.log(userId);
   const feedback =
     userId && id
       ? await getFeedbackByInterviewId({ interviewId: id, userId })
       : null;
-  console.log(feedback);
+
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const formmatedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
   ).format(" MMM d, YYYY");
+
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96 cursor-pointer">
       <div className="card-interview">
@@ -65,7 +65,7 @@ const InterviewCard = async ({
             <Link
               href={feedback ? `/interview/${id}/feedback` : `/interview/${id}`}
             >
-              {feedback ? "Check Feedback" : "View Interview"}
+              {feedback ? "Check Feedback" : "Take Interview"}
             </Link>
           </Button>
         </div>
