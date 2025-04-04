@@ -22,7 +22,7 @@ const InterviewCard = async ({
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
   const formmatedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
-  ).format(" MMM d, YYYY");
+  ).format(" MMM D, YYYY");
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96 cursor-pointer">
